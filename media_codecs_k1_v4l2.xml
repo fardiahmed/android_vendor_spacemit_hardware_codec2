@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    K1 VPU (Mali-V "linlon-v52", amvx.ko) hardware decoders and encoders through
+    external/v4l2_codec2 (encoders: avc/vp8/vp9; v4l2_codec2 has no HEVC encoder component).
+    Installed as /vendor/etc/media_codecs_c2.xml, which Codec2InfoBuilder parses in addition to
+    the shared media_codecs.xml (Google software codecs). v4l2_codec2 components report rank 0x80,
+    below the software codecs' 0x200, so these are preferred when present.
+    Firmware: /vendor/firmware/linlon-v52_v76-80-2/{h264,hevc,vp8,vp9}dec.fwb, {h264,vp8,vp9}enc.fwb.
+    Encoder limits: 1080p30 (244800 16x16 blocks/s), until measured on the board.
+    Limits are conservative (up to 4K); tighten or raise once measured on the board.
+-->
+<MediaCodecs>
+    <Decoders>
+        <MediaCodec name="c2.v4l2.avc.decoder" type="video/avc">
+            <Limit name="size" min="16x16" max="4096x2304" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-1044480" />
+            <Limit name="bitrate" range="1-62500000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="c2.v4l2.hevc.decoder" type="video/hevc">
+            <Limit name="size" min="16x16" max="4096x2304" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-1044480" />
+            <Limit name="bitrate" range="1-62500000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="c2.v4l2.vp8.decoder" type="video/x-vnd.on2.vp8">
+            <Limit name="size" min="16x16" max="4096x2304" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-1044480" />
+            <Limit name="bitrate" range="1-62500000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="c2.v4l2.vp9.decoder" type="video/x-vnd.on2.vp9">
+            <Limit name="size" min="16x16" max="4096x2304" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-1044480" />
+            <Limit name="bitrate" range="1-62500000" />
+            <Limit name="concurrent-instances" max="8" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+    </Decoders>
+    <Encoders>
+        <MediaCodec name="c2.v4l2.avc.encoder" type="video/avc">
+            <Limit name="size" min="64x64" max="1920x1088" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-244800" />
+            <Limit name="bitrate" range="1-40000000" />
+            <Limit name="concurrent-instances" max="4" />
+        </MediaCodec>
+        <MediaCodec name="c2.v4l2.vp8.encoder" type="video/x-vnd.on2.vp8">
+            <Limit name="size" min="64x64" max="1920x1088" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-244800" />
+            <Limit name="bitrate" range="1-40000000" />
+            <Limit name="concurrent-instances" max="4" />
+        </MediaCodec>
+        <!-- VP9 encoding above 1280x720 produces corrupt inter frames on the K1 (firmware);
+             capped so apps fall back to the software encoder for larger sizes. -->
+        <MediaCodec name="c2.v4l2.vp9.encoder" type="video/x-vnd.on2.vp9">
+            <Limit name="size" min="64x64" max="1280x720" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="1-108000" />
+            <Limit name="bitrate" range="1-40000000" />
+            <Limit name="concurrent-instances" max="4" />
+        </MediaCodec>
+    </Encoders>
+</MediaCodecs>

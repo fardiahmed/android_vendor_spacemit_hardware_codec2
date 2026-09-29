@@ -1,0 +1,8 @@
+# Codec2 (AIDL) service for the K1 VPU. /dev/video* is media:camera 0660 (ueventd.k1.rc);
+# gralloc/dma-heap buffers are shared with the VPU as DMABUFs.
+service vendor.media.c2-k1-v4l2 /vendor/bin/hw/android.hardware.media.c2-service.k1-v4l2
+    class hal
+    user media
+    group camera mediadrm drmrpc
+    ioprio rt 4
+    task_profiles ProcessCapacityHigh

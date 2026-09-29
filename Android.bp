@@ -1,0 +1,36 @@
+// Codec2 AIDL service for the VPU (external/v4l2_codec2 V4L2 components).
+
+soong_namespace {
+    imports: ["external/v4l2_codec2"],
+}
+
+cc_binary {
+    name: "android.hardware.media.c2-service.k1-v4l2",
+    vendor: true,
+    relative_install_path: "hw",
+    srcs: ["service.cpp"],
+    defaults: ["libcodec2-aidl-defaults"],
+    shared_libs: [
+        "libv4l2_codec2_v4l2",
+        "libv4l2_codec2_components",
+        "libavservices_minijail",
+        "libbase",
+        "libbinder_ndk",
+        "libcodec2_hal_selection",
+        "liblog",
+    ],
+    init_rc: ["android.hardware.media.c2-service.k1-v4l2.rc"],
+    vintf_fragments: ["android.hardware.media.c2-service.k1-v4l2.xml"],
+    required: [
+        "android.hardware.media.c2-default-seccomp_policy",
+        "libc2plugin_store",
+        "media_codecs_k1_v4l2.xml",
+    ],
+}
+
+prebuilt_etc {
+    name: "media_codecs_k1_v4l2.xml",
+    src: "media_codecs_k1_v4l2.xml",
+    filename: "media_codecs_c2.xml",
+    vendor: true,
+}
